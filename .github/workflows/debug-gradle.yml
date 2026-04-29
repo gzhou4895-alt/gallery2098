@@ -1,0 +1,34 @@
+name: Debug Gradle Tasks
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ 拉取代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ 安装 Java（Android 必须）
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # 3️⃣ 设置 Android SDK（可选但推荐）
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 4️⃣ 给 gradlew 权限
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      # 5️⃣ 打印 Gradle tasks（你要的核心）
+      - name: Show Gradle tasks
+        working-directory: Android
+        run: ./gradlew :src:app:tasks --all
